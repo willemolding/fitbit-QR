@@ -1,0 +1,10 @@
+{
+  "fitbit": {
+    "appUUID": "a8b6ac74-f68f-4be4-8328-9671d4a506bd",
+    "appType": "app",
+    "appDisplayName": "QR",
+    "iconFile": "resources/icon.png",
+    "wipeColor": "#607d8b",
+    "requestedPermissions": []
+  }
+}
