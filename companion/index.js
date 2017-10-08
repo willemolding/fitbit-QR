@@ -13,7 +13,7 @@ console.log("Companion Started");
 messaging.peerSocket.onopen = function() {
   // Ready to send or receive messages
   console.log("Companion ready to message");
-  encodeAndSend("QR on fitbit");
+  encodeAndSend();
 }
 
 // Listen for the onerror event
@@ -24,9 +24,7 @@ messaging.peerSocket.onerror = function(err) {
 
 // Event fires when a setting is changed
 settingsStorage.onchange = function(evt) {
-  let codeString = JSON.parse(settingsStorage.getItem("codeString")).name;
-  let errorCorrectionLevel = JSON.parse(settingsStorage.getItem("errorCorrectionLevel")).values[0].value;
-  encodeAndSend(codeString, errorCorrectionLevel);
+  encodeAndSend();
 }
 
 // if (me.launchReasons.settingChanged) {
@@ -39,15 +37,33 @@ function sendMessage(data) {
       messaging.peerSocket.send(data);
     }
 }
+
+function getSettings() {
+  let settings = {};
+  try {
+    settings.codeString = JSON.parse(settingsStorage.getItem("codeString")).name;
+  } catch (err) {
+    settings.codeString = "QR on Fitbit";
+  }
+  
+  try {
+    settings.errorCorrectionLevel = JSON.parse(settingsStorage.getItem("errorCorrectionLevel")).values[0].value;
+  } catch (err) {
+    settings.errorCorrectionLevel = "M";
+  }
+  return settings;
+}
   
 // Send a message to the peer
-function encodeAndSend(codeString, errorCorrectionLevel="L") {
-    console.log("encoding data: "+codeString);
-    console.log("at error correction level: "+errorCorrectionLevel);
+function encodeAndSend() {
+    let settings = getSettings();
+    
+    console.log("encoding data: "+settings.codeString);
+    console.log("at error correction level: "+settings.errorCorrectionLevel);
   
     let codeGenerator = new QRCode({
-      text : codeString,
-      correctLevel : errorCorrectionLevel,
+      text : settings.codeString,
+      correctLevel : settings.errorCorrectionLevel,
     });
   
     console.log("sending data to watch");
