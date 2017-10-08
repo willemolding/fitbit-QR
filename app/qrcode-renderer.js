@@ -11,7 +11,7 @@ QRCodeRenderer.prototype.resetCode = function() {
   console.log("resetting code");
   let modules = this.document.getElementsByClassName("qr-module");
   modules.forEach(function(module){
-    module.style.fill = colorLight;
+    module.style.display = "none";
   });
 }; 
 
@@ -34,11 +34,13 @@ QRCodeRenderer.prototype.drawCode = function(data) {
           module.y = codeElement.y + (quietSpace + row)*moduleHeight;
           module.width = moduleWidth+1;
           module.height = moduleHeight+1;
+          module.style.display = "inline";
           module.style.fill = colorDark;
           module_idx++;
         }
       }
     }
+    console.log("rendering complete");
   } catch (err) {
     console.log(err);
   }

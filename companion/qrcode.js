@@ -189,12 +189,18 @@ function _getUTF8Length(sText) {
 	return replacedText.length + (replacedText.length != sText ? 3 : 0);
 }
 
+var ErrorCorrectionStringMapping = {
+  "H":QRErrorCorrectLevel.H,
+  "Q":QRErrorCorrectLevel.Q,
+  "M":QRErrorCorrectLevel.M,
+  "L":QRErrorCorrectLevel.L,
+};
+
 
 export function QRCode(vOption) {
 	this._htOption = {
 		typeNumber : 4,
 		correctLevel : QRErrorCorrectLevel.H,
-    	quietZone : 2,
 	};
 
 	
@@ -203,6 +209,10 @@ export function QRCode(vOption) {
 			text : vOption
 		};
 	}
+  
+  if (typeof vOption.correctLevel === 'string') {
+    vOption.correctLevel = ErrorCorrectionStringMapping[vOption.correctLevel];
+  }
 	
 	// Overwrites options
 	if (vOption) {

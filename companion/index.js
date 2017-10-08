@@ -24,12 +24,14 @@ messaging.peerSocket.onerror = function(err) {
 
 // Event fires when a setting is changed
 settingsStorage.onchange = function(evt) {
-  encodeAndSend(JSON.parse(settingsStorage.getItem("codeString")).name);
+  let codeString = JSON.parse(settingsStorage.getItem("codeString")).name;
+  let errorCorrectionLevel = JSON.parse(settingsStorage.getItem("errorCorrectionLevel")).values[0].value;
+  encodeAndSend(codeString, errorCorrectionLevel);
 }
 
-if (me.launchReasons.settingChanged) {
-  encodeAndSend(JSON.parse(settingsStorage.getItem("codeString")).name);
-}
+// if (me.launchReasons.settingChanged) {
+//   encodeAndSend(JSON.parse(settingsStorage.getItem("codeString")).name);
+// }
   
 
 function sendMessage(data) {
@@ -39,9 +41,15 @@ function sendMessage(data) {
 }
   
 // Send a message to the peer
-function encodeAndSend(codeString) {
-    console.log("encoding data:"+codeString);
-    let codeGenerator = new QRCode(codeString);
+function encodeAndSend(codeString, errorCorrectionLevel="L") {
+    console.log("encoding data: "+codeString);
+    console.log("at error correction level: "+errorCorrectionLevel);
+  
+    let codeGenerator = new QRCode({
+      text : codeString,
+      correctLevel : errorCorrectionLevel,
+    });
+  
     console.log("sending data to watch");
     sendMessage({
       data : codeGenerator.getCodeData()
