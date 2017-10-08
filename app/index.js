@@ -13,6 +13,13 @@ display.on = true;
 
 let qrRenderer = new QRCodeRenderer(document);
 
+//try and render the last QR code from storage
+try {
+  qrRenderer.drawCode(fs.readFileSync("qr_data.txt", "cbor"));
+} catch (err) {
+  console.log(err);
+}
+
 // Listen for the onopen event
 messaging.peerSocket.onopen = function() {
   // Ready to send or receive messages
@@ -26,11 +33,13 @@ messaging.peerSocket.onmessage = function(evt) {
   console.log("device received message");
   let data = evt.data.data;
   console.log("size of data received "+data.length);
+  
+  //reset the modules and render
+  qrRenderer.resetCode();
+  qrRenderer.drawCode(data);
 
-  //reset the modules
-  qrRenderer.resetCode()
-  qrRenderer.drawCode(data)
-
+  //save the code data
+  fs.writeFileSync("qr_data.txt", data, "cbor");
 }
 
 
