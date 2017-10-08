@@ -27,9 +27,10 @@ settingsStorage.onchange = function(evt) {
   encodeAndSend();
 }
 
-// if (me.launchReasons.settingChanged) {
-//   encodeAndSend(JSON.parse(settingsStorage.getItem("codeString")).name);
-// }
+// If companion launched because of a settings change
+if (me.launchReasons.settingChanged) {
+  encodeAndSend();
+}
   
 
 function sendMessage(data) {
