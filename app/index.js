@@ -6,12 +6,12 @@ import document from "document";
 import * as messaging from "messaging";
 import { display } from "display";
 import * as fs from "fs";
-
-const colorLight = "#ffffff";
-const colorDark = "#000000";
+import { QRCodeRenderer } from "./qrcode-device.js";
 
 display.autoOff = false;
 display.on = true;
+
+let qrRenderer = new QRCodeRenderer(document);
 
 // Listen for the onopen event
 messaging.peerSocket.onopen = function() {
@@ -28,48 +28,11 @@ messaging.peerSocket.onmessage = function(evt) {
   console.log("size of data received "+data.length);
 
   //reset the modules
-  resetQRCode()
-  drawQRCode(data)
+  qrRenderer.resetCode()
+  qrRenderer.drawCode(data)
 
 }
 
-function resetQRCode() {
-  console.log("resetting code");
-    let modules = document.getElementsByClassName("qr-module");
-    modules.forEach(function(module){
-      module.style.fill = colorLight;
-    });
-}
-
-function drawQRCode(data) {
-  console.log("Rendering code");
-  let codeElement = document.getElementById("code");
-  let modules = document.getElementsByClassName("qr-module");
-  let nCount = data.length;
-  let quietSpace = 1;
-  let moduleWidth = codeElement.width/(nCount+2*quietSpace);
-  let moduleHeight = codeElement.height/(nCount+2*quietSpace);
-
-  
-  try {
-    let module_idx = 0;
-    for (var row = 0; row < nCount; row++) {
-      for (var col = 0; col < nCount; col++) {
-        if (data[row][col]) {
-          let module = modules[module_idx];
-          module.x = codeElement.x + (quietSpace + col)*moduleWidth;
-          module.y = codeElement.y + (quietSpace + row)*moduleHeight;
-          module.width = moduleWidth+1;
-          module.height = moduleHeight+1;
-          module.style.fill = colorDark;
-          module_idx++;
-        }
-      }
-    }
-  } catch (err) {
-    console.log(err);
-  }
-}
 
 // Listen for the onerror event
 messaging.peerSocket.onerror = function(err) {

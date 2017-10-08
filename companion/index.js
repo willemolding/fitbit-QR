@@ -13,7 +13,7 @@ console.log("Companion Started");
 messaging.peerSocket.onopen = function() {
   // Ready to send or receive messages
   console.log("Companion ready to message");
-  encodeAndSend("test");
+  encodeAndSend("QR on fitbit");
 }
 
 // Listen for the onerror event

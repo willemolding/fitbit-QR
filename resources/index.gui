@@ -1,5 +1,7 @@
 <svg viewport-fill="black">
-  <rect x="59" y="10" width="230" height="230" id="code" fill="white">
+  <rect x="59" y="10" width="230" height="230" id="code" fill="#ffffff">
+    <rect class="qr-module"/>
+    <rect class="qr-module"/>
     <rect class="qr-module"/>
     <rect class="qr-module"/>
     <rect class="qr-module"/>
