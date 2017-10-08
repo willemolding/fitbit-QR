@@ -6,7 +6,7 @@ import document from "document";
 import * as messaging from "messaging";
 import { display } from "display";
 import * as fs from "fs";
-import { QRCodeRenderer } from "./qrcode-device.js";
+import { QRCodeRenderer } from "./qrcode-renderer.js";
 
 display.autoOff = false;
 display.on = true;
